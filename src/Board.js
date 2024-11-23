@@ -27,9 +27,6 @@ function Board() {
 
     }, []);
     useEffect(() => {
-        console.log(typeof opendButtons, opendButtons);
-        console.log(typeof cardCount, cardCount);
-
         if (opendButtons===parseInt(cardCount)){
             console.log("ניגמר המישחק")
             setFinished(prevState => !prevState);
@@ -53,7 +50,6 @@ function Board() {
 
         dataIds = dataIds.sort(() => Math.random() - 0.5);
 
-
         for (let i = 0; i < cardCount; i++) {
             newButtons.push({
                 id: i ,
@@ -69,35 +65,17 @@ function Board() {
 
     useEffect(() => {
         const checkIfTheSame=()=>{
-
             if (clickedButtons===2) {
-                console.log("ניכנס לאיף הראשון");
                 let validButtons = buttons.filter(button => button.text !== ""&&!button.canToggle);
-                // console.log(validButtons.length+"גודל1");
-                // console.log(validButtons);
                 if (validButtons.length === 2) {
-                    // console.log("ניכנס לאיף השני");
-
                     if (validButtons[0].text === validButtons[1].text) {
-                        // console.log("ניכנס לאיף השלישי");
                         validButtons[0].canToggle = !validButtons[0].canToggle;
                         validButtons[1].canToggle = !validButtons[1].canToggle;
                         setOpendButtons(prevState => prevState + 2);
-
-
-
                     } else {
-                        // setButtons(prevButtons =>
-                        //     prevButtons.map(button =>
-                        //         validButtons.some(validButton => validButton.id === button.id)
-                        //             ?  { ...button, text: "" }
-                        //             : button
-                        //     ))
                         setButtons(prevButtons => {
                             const updatedButtons = [...prevButtons];
-
                             validButtons.forEach(validButton => {
-
                                 const buttonIndex = updatedButtons.findIndex(button => button.id === validButton.id);
                                 if (buttonIndex !== -1) {
                                     setTimeout(() => {
@@ -109,18 +87,12 @@ function Board() {
                                     }, 500);
                                 }
                             });
-
                             return updatedButtons;
                         });
-
                     }
-
                 }
                 setClickedButtons(0);
-
-
             }
-
         }
         checkIfTheSame();
 
@@ -154,14 +126,24 @@ function Board() {
 
 
     return (
-        <div className="Board">
+        <div className="container text-center mt-4">
+            <div className="mb-3">
+                {finished ? (
+                    <div className="alert alert-success" role="alert">
+                        🏆 Game Over! Well done!
+                    </div>
+                ) : (
+                    <div className="badge bg-info fs-4 p-3">
+                        ⏱️ Time: {counter} seconds
+                    </div>
+                )}
+            </div>
 
-            {finished ?<div><br/></div> : <div>Time: {counter} </div>}
-            <Buttons buttons={buttons} toggleButton={toggleButton} />
-            <GameResult finished={finished} userName={userName} counter={counter} restartGame={restartGame} />
-
-
-
+            {/*<Buttons buttons={buttons} toggleButton={toggleButton}/>*/}
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                <Buttons buttons={buttons} toggleButton={toggleButton}/>
+            </div>
+            <GameResult finished={finished} userName={userName} counter={counter} restartGame={restartGame}/>
         </div>
     )
 }

@@ -23,21 +23,40 @@ function Form(){
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
+        <div className="container mt-4">
+            <form className="p-4 border rounded shadow-sm bg-light mx-auto" onSubmit={handleSubmit}
+                  style={{maxWidth: '500px'}}>
+                <h3 className="text-center mb-4">🎯 Start the Game</h3>
 
-                <input value={userName}
-                       onChange={(e)=>setUserName(e.target.value)}
-                       type="text"
-                       placeholder="enter name" />
-                <input value={cardCount}
-                       onChange={(e)=>setCardCount(e.target.value)}
-                       type="number"
-                       placeholder="enter card count"
-                       min="4"
-                       max="30" />
+                <div className="mb-3">
+                    <label htmlFor="userName" className="form-label">Username</label>
+                    <input
+                        id="userName"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter your username"
+                        required
+                    />
+                </div>
 
-                <button type="submit">Submit</button>
+                <div className="mb-3">
+                    <label htmlFor="cardCount" className="form-label">Number of Cards</label>
+                    <input
+                        id="cardCount"
+                        value={cardCount}
+                        onChange={(e) => setCardCount(e.target.value)}
+                        type="number"
+                        className="form-control"
+                        placeholder="Enter number of cards (4-30)"
+                        min="4"
+                        max="30"
+                        required
+                    />
+                </div>
+
+                <button type="submit" className="btn btn-primary w-100">🎮 Start</button>
             </form>
         </div>
 
