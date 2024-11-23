@@ -138,8 +138,6 @@ function Board() {
                     </div>
                 )}
             </div>
-
-            {/*<Buttons buttons={buttons} toggleButton={toggleButton}/>*/}
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                 <Buttons buttons={buttons} toggleButton={toggleButton}/>
             </div>
