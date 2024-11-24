@@ -11,7 +11,7 @@ function App() {
   return (
     <div className="App">
         <UserNameProvider>
-            <Router>
+            <Router basename="/FlipMaster-">
                 <Routes>
                     <Route path="/" element={<Form />} />
                     <Route path="/board" element={<Board />} />

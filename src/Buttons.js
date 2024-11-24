@@ -17,11 +17,10 @@ function Buttons({ buttons, toggleButton }) {
         >
             {buttons.map((button) => (
                 <button
-                    key={button.id}
                     id={button.id}
                     data-id={button.dataId}
-                    disabled={button.canToggle}
-                    onClick={(event) => toggleButton(event, event.target.getAttribute('data-id'))}
+                    disabled={false}
+                    onClick={(e) => toggleButton(e)}
                     className="btn btn-primary"
                     style={{
                         width: "60px",
@@ -30,7 +29,6 @@ function Buttons({ buttons, toggleButton }) {
                         fontWeight: "bold",
                     }}
                 >
-                    {button.text}
                 </button>
             ))}
         </div>

@@ -8,7 +8,7 @@ function Board() {
     const [counter, setCounter] = useState(0);
     const [opendButtons, setOpendButtons] = useState(0);
     const [buttons, setButtons] = useState([]);
-    const [clickedButtons, setClickedButtons] = useState(0);
+    const [buttonEvents,setButtonEvents]=useState([])
     const [finished, setFinished] = useState(false);
     const [intervalId, setIntervalId] = useState(null);
     const {cardCount,userName,setUserName,setCardCount} =useContext(UserNameContext)
@@ -28,7 +28,6 @@ function Board() {
     }, []);
     useEffect(() => {
         if (opendButtons===parseInt(cardCount)){
-            console.log("ניגמר המישחק")
             setFinished(prevState => !prevState);
             clearInterval(intervalId);
 
@@ -40,79 +39,66 @@ function Board() {
 
 
 
-
-    useEffect(() => {
-        const newButtons = [];
-        let dataIds = [];
-        for (let i = 1; i <= cardCount / 2; i++) {
-            dataIds.push(i, i);
+    useEffect(()=>{
+        const buttonsArr=[];
+        let dataId=[];
+        for(let i=0;i<cardCount/2;i++){
+            dataId.push(i+1,i+1);
         }
+        dataId =dataId.sort(()=>Math.random() - 0.5);
 
-        dataIds = dataIds.sort(() => Math.random() - 0.5);
+        for(let i=0;i<cardCount;i++){
+            buttonsArr.push({
+                    id: i,
+                    dataId:dataId[i],
+                }
 
-        for (let i = 0; i < cardCount; i++) {
-            newButtons.push({
-                id: i ,
-                dataId: dataIds[i],
-                text:"",
-                canToggle:false,
-            });
+            );
         }
+        setButtons(buttonsArr);
 
-        setButtons(newButtons);
-    }, []);
-
-
-    useEffect(() => {
-        const checkIfTheSame=()=>{
-            if (clickedButtons===2) {
-                let validButtons = buttons.filter(button => button.text !== ""&&!button.canToggle);
-                if (validButtons.length === 2) {
-                    if (validButtons[0].text === validButtons[1].text) {
-                        validButtons[0].canToggle = !validButtons[0].canToggle;
-                        validButtons[1].canToggle = !validButtons[1].canToggle;
+    },[])
+    useEffect(()=>{
+        const check=()=>{
+            if(buttonEvents.length ===2) {
+                if(buttonEvents[0].id!==buttonEvents[1].id){
+                    if (buttonEvents[0].innerText.trim()===buttonEvents[1].innerText.trim()){
+                        buttonEvents[0].disabled=!buttonEvents[0].disabled;
+                        buttonEvents[1].disabled=!buttonEvents[1].disabled;
                         setOpendButtons(prevState => prevState + 2);
-                    } else {
-                        setButtons(prevButtons => {
-                            const updatedButtons = [...prevButtons];
-                            validButtons.forEach(validButton => {
-                                const buttonIndex = updatedButtons.findIndex(button => button.id === validButton.id);
-                                if (buttonIndex !== -1) {
-                                    setTimeout(() => {
-                                        setButtons(currentButtons => {
-                                            const newButtons = [...currentButtons];
-                                            newButtons[buttonIndex] = { ...newButtons[buttonIndex], text: "" };
-                                            return newButtons;
-                                        });
-                                    }, 500);
-                                }
-                            });
-                            return updatedButtons;
-                        });
+                    }
+                    else {
+                        setTimeout(() => {
+                            buttonEvents[0].innerText = null;
+                            buttonEvents[1].innerText = null;
+                        }, 500);
+
                     }
                 }
-                setClickedButtons(0);
-            }
+                setButtonEvents([]);
+
+                }
+
         }
-        checkIfTheSame();
-
-    },[clickedButtons])
+        check();
 
 
+    },[buttonEvents])
 
 
-    const toggleButton = (e, key) => {
-        setButtons(prevButtons =>
-            prevButtons.map(button =>
-                button.id === parseInt(e.target.getAttribute("id"), 10)
-                    ? { ...button, text: button.text === "" ? key  : ""}
-                    : button
-            )
-        );
 
 
-        setClickedButtons(prevState => prevState + 1);
-    };
+        const toggleButton = (e) => {
+        const button = e.target;
+        if(button.innerText.trim()===""){
+            const newText = button.dataset.id;
+            button.innerText= newText ;
+        }
+        else {
+            button.innerText=null;
+        }
+        setButtonEvents(prevState => [...prevState, button]);
+    }
 
     const restartGame = () => {
         navigate('/')
